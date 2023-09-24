@@ -10,3 +10,28 @@ export const loginCall = async (userCredential, dispatch) => {
   }
 };
 
+
+export const searchUsers = async (name) => {
+ 
+  try {
+    const res = await axios.get("/users/search/"+name);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const updateProfile = async (data) => {
+ 
+  try {
+    const res = await axios.put("/users/update-profile/"+data.userId,data);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const logoutCall = async (dispatch) => {
+  dispatch({ type: "LOGOUT" });
+};
+

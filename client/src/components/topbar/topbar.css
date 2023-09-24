@@ -94,3 +94,10 @@
   object-fit: cover;
   cursor: pointer;
 }
+
+
+
+.btn{
+  background-color: #1877f2;
+  color: white;
+}

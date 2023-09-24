@@ -1,0 +1,48 @@
+@import '../../global.scss';
+.menu{
+    background-color: black;
+    height: 100vh;
+    width:300px;
+    z-index: 2;
+    top:0;
+    opacity: 0.8;
+    right: -300px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 1s ease;
+
+
+    &.active{
+        right:0;
+    }
+
+    ul{
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 0;
+        color: white;
+        font-size: 30px;
+        font-weight: 300;
+        list-style: none;
+        width: 60%;
+        @include mobile{
+            font-size:20px; 
+        }
+
+        li{
+            margin-bottom: 25px;
+            a{
+                font-family: inherit;
+                color:inherit;
+                font-size: inherit;
+                text-decoration: none;
+            }
+            &:hover{
+                font-weight:500;
+            }
+        }
+    }
+}

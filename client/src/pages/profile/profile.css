@@ -48,3 +48,26 @@
 .profileRightBottom{
     display: flex;
 }
+.actionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+}
+.cancelButton{
+    
+        border: none;
+        padding: 7px;
+        border-radius: 5px;
+        background-color: red;
+        font-weight: 500;
+        margin-right: 20px;
+        cursor: pointer;
+        color: white;
+    
+}
+.shareOptionText{
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 20px;
+}

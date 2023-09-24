@@ -1,12 +1,60 @@
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@material-ui/icons";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { Menu } from "@material-ui/icons";
+import { Link, useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { Button } from "@material-ui/core";
+import { searchUsers } from "../../apiCalls";
+import { useHistory } from "react-router-dom";
 
 export default function Topbar() {
+  const location = useLocation();
+  const history = useHistory();
+  function navigateTo() {
+    history.push("/search");
+  }
+
+  function debounce(func, delay) {
+    let timeoutID = null;
+    return function () {
+      clearTimeout(timeoutID);
+      let args = arguments;
+      let that = this;
+      timeoutID = setTimeout(function () {
+        func.apply(that, args);
+      }, delay);
+    };
+  }
+
+  const [inputFields, setInputFields] = useState({});
+  const [foundUsers, setFoundUsers] = useState([]);
+
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const handleInputChange = ({ target: { name, value } }) => {
+    setInputFields((prev) => ({ ...prev, [name]: value }));
+  };
+  useEffect(() => {
+    if (location.pathname == "/")
+      localStorage.setItem("foundUsers", JSON.stringify([]));
+  }, []);
+
+  // const searchUsersByQuery = debounce(function () {
+  //   fetchUsers();
+  // }, 1000);
+
+  async function fetchUsers() {
+    try {
+      const searchResult = await searchUsers(inputFields.name);
+      setFoundUsers(searchResult);
+      localStorage.setItem("foundUsers", JSON.stringify(searchResult));
+      navigateTo();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -18,9 +66,15 @@ export default function Topbar() {
         <div className="searchbar">
           <Search className="searchIcon" />
           <input
-            placeholder="Search for friend, post or video"
+            placeholder="Search for People"
             className="searchInput"
+            type="text"
+            name="name"
+            autoComplete="off"
+            value={inputFields.name}
+            onChange={handleInputChange}
           />
+          {inputFields.name?<Button className="btn" onClick={fetchUsers}>Search</Button>:''}
         </div>
       </div>
       <div className="topbarRight">
@@ -40,6 +94,11 @@ export default function Topbar() {
           <div className="topbarIconItem">
             <Notifications />
             <span className="topbarIconBadge">1</span>
+          </div>
+          <div className="topbarIconItem">
+            <Link to="/logout">
+              <Button>Logout</Button>
+            </Link>
           </div>
         </div>
         <Link to={`/profile/${user.username}`}>
